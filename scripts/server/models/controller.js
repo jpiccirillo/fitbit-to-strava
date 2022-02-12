@@ -25,9 +25,9 @@ class Controller {
   }
 
   async _all(req, res, next) {
-    console.log(this.index);
     const params = {
       index: this.index,
+      body: this.getSupportedQueryParams(req, bodybuilder()),
     };
     const p = await exec("search", params, ...arguments);
     addToRes(p.body.hits.hits, ...arguments);
@@ -39,6 +39,7 @@ class Controller {
     const params = {
       id: req.params[this.idName],
       index: this.index,
+      body: this.getSupportedQueryParams(req, bodybuilder()),
     };
     const p = await exec("get", params, ...arguments);
     addToRes([p.body], ...arguments);

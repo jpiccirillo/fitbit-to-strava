@@ -1,5 +1,4 @@
 "use-strict";
-Array.prototype.flat;
 const SUCCESSFUL_UPDATE = 203;
 const SUCCESSFUL_GET = 200;
 const SUCCESSFUL_CREATE = 201;
@@ -8,7 +7,7 @@ const { getIdName, getWhereToStoreResult } = require("../helpers/index");
 const bodybuilder = require("bodybuilder");
 
 async function addToRes(result, req, res) {
-  res.locals[getWhereToStoreResult()] = result;
+  res.locals[getWhereToStoreResult()] = { total: result.length, data: result };
 }
 
 async function exec(method, params, req, res, next) {
@@ -26,6 +25,7 @@ class Controller {
   }
 
   async _all(req, res, next) {
+    console.log(this.index);
     const params = {
       index: this.index,
     };
@@ -41,7 +41,7 @@ class Controller {
       index: this.index,
     };
     const p = await exec("get", params, ...arguments);
-    addToRes(p.body, ...arguments);
+    addToRes([p.body], ...arguments);
     res.status(SUCCESSFUL_GET);
     return next();
   }

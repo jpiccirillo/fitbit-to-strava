@@ -25,6 +25,8 @@ C.getSupportedQueryParams = function ({ query: queries }, bodybuilder) {
     );
   }
 
+  bodybuilder.sort("convertedStartTime", "asc");
+
   return bodybuilder.build();
 };
 

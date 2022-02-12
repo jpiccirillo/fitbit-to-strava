@@ -19,6 +19,8 @@ C.getSupportedQueryParams = function ({ query: queries }, bodybuilder) {
     );
   }
 
+  bodybuilder.sort("dateTime", "asc");
+
   return bodybuilder.build();
 };
 

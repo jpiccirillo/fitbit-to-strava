@@ -1,28 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ActivityCard :data="exercise" />
+    <HeartRateChart :exercise="exercise" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ActivityCard from "./components/ActivityCard.vue";
+import HeartRateChart from "./components/HeartRateChart.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    ActivityCard,
+    HeartRateChart,
+  },
+  data() {
+    return {
+      exercise: {},
+    };
+  },
+  created() {
+    fetch("http://localhost:3000/exercises?size=1")
+      .then((r) => r.json())
+      .then((r) => {
+        this.exercise = r.data[0]._source;
+      });
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>

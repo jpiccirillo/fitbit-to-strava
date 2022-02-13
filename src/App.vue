@@ -1,11 +1,21 @@
 <template>
   <div id="app">
-    <ActivityCard :data="exercise" />
+    <ActivityCard v-if="Object.keys(exercise).length > 0" :data="exercise" />
     <HeartRateChart :exercise="exercise" />
-    <button @click="backOfLine" :disabled="buttonDisabled">
+    <button
+      class="styled-button neutral"
+      @click="backOfLine"
+      :disabled="buttonDisabled"
+    >
       Move to Back of Line
     </button>
-    <button @click="getNewExercise" :disabled="buttonDisabled">Refetch</button>
+    <button
+      class="styled-button neutral"
+      @click="getNewExercise"
+      :disabled="buttonDisabled"
+    >
+      Refetch
+    </button>
   </div>
 </template>
 

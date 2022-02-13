@@ -1,0 +1,48 @@
+:root {
+  --blue: #4e9af1;
+  --red: #f14e4e;
+  --orange: #f1bb4e;
+  --green: #4ef18f;
+  --neutral: #CCCCCC;
+}
+
+.styled-button {
+  display: inline-block;
+  padding: 0.7em 1.4em;
+  margin: 0 0.3em 0.3em 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-weight: 400;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+  border-radius: 5px;
+}
+
+.primary {
+  background-color: var(--blue);
+}
+.success {
+  background-color: var(--green);
+}
+.warning {
+  background-color: var(--orange);
+}
+.danger {
+  background-color: var(--red);
+}
+.neutral {
+  background-color: var(--neutral);
+  color: grey;
+}
+
+.styled-button:active {
+  top: 0.1em;
+}
+
+@media all and (max-width: 30em) {
+  .styled-button {
+    display: block;
+    margin: 0.4em auto;
+  }
+}

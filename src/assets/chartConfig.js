@@ -36,4 +36,5 @@ export default {
       bpm: "red",
     },
   },
+  tooltip: { format: {} },
 };

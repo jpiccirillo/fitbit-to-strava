@@ -38,6 +38,11 @@ export default {
         .then(() => {
           staticConfiguration.grid.x.lines[0].value = beginning;
           staticConfiguration.grid.x.lines[1].value = end;
+          staticConfiguration.tooltip.format.title = (mouse) => {
+            const { timezone: t, minutes: m } = this.$options.filters;
+            const howFarThru = new Date(t(mouse)) - new Date(t(beginning));
+            return m(howFarThru) + "min";
+          };
           const exerciseSpecificConfig = {
             data: {
               x: "x",

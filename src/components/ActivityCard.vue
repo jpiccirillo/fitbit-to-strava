@@ -6,7 +6,9 @@
         {{ new Date(data.originalStartTime).toLocaleString() }}
       </h3>
     </div>
-    <p>Duration: {{ data.originalDuration | minutes }}min</p>
+    <div>Duration: {{ data.originalDuration | minutes }}min</div>
+    <div>Active Duration: {{ data.activeDuration | minutes }}min</div>
+    <div>Distance: {{ data.distance.toFixed(2) }}mi</div>
   </div>
 </template>
 

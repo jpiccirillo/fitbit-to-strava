@@ -73,8 +73,9 @@ class Controller {
 
   async _update(req, res, next) {
     const params = {
+      id: req.params[this.idName],
       index: this.index,
-      body: req.body,
+      body: { doc: req.body },
     };
     const p = await exec("update", params, ...arguments);
     addToRes(p, ...arguments);

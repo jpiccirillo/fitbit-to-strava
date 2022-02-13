@@ -14,6 +14,10 @@ nonRangeQueries.activityName = function (value, urlQueryName, bb) {
   bb.filter("term", "activityName", value);
   return bb;
 };
+nonRangeQueries.backOfLine = function (value, urlQueryName, bb) {
+  bb.filter("match", "backOfLine", value === "false" ? false : true);
+  return bb;
+};
 
 C.getSupportedQueryParams = function ({ query: queries }, bodybuilder) {
   for (let key in queries) {

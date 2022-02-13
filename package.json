@@ -11,6 +11,7 @@
     "@elastic/elasticsearch": "^7.17.0",
     "axios": "^0.25.0",
     "bodybuilder": "^2.4.0",
+    "c3": "^0.7.20",
     "core-js": "^3.6.5",
     "express": "^4.17.2",
     "vue": "^2.6.11"

@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    {{ heartrates }}
+    <div id="chart"></div>
   </div>
 </template>
 
 <script>
+import c3 from "c3";
+import staticConfiguration from "../assets/chartConfig.js";
+import { mergeDeep } from "../helpers/index.js";
+
 export default {
-  name: "HelloWorld",
+  name: "HeartRateChart",
   props: ["exercise"],
   data() {
     return {
@@ -15,21 +19,37 @@ export default {
   },
   watch: {
     exercise(exercise) {
-      const { convertedStartTime: beginning, duration } = exercise;
+      const buffer = 5 * 1000 * 60;
+      let { convertedStartTime: beginning, duration } = exercise;
       const end = beginning + duration;
-      console.log(
-        `http://localhost:3000/heartrates?size=1000&dateTimeBtwn=${beginning},${end}`
-      );
-      fetch(
-        `http://localhost:3000/heartrates?size=1000&dateTimeBtwn=${beginning},${end}`
-      )
+      const buff_begin = beginning - buffer;
+      const buff_end = end + buffer;
+      const url = `http://localhost:3000/heartrates?size=10000&dateTimeBtwn=${buff_begin},${buff_end}`;
+
+      fetch(url)
         .then((r) => r.json())
         .then((r) => {
-          console.log(r);
           this.heartrates = r.data.map(({ _source }) => ({
             bpm: _source.bpm,
             dateTime: _source.dateTime,
           }));
+          return this.heartrates;
+        })
+        .then(() => {
+          staticConfiguration.grid.x.lines[0].value = beginning;
+          staticConfiguration.grid.x.lines[1].value = end;
+          const exerciseSpecificConfig = {
+            data: {
+              x: "x",
+              columns: [
+                ["x", ...this.heartrates.map((r) => r.dateTime)],
+                ["bpm", ...this.heartrates.map((r) => r.bpm)],
+              ],
+            },
+          };
+          c3.generate(
+            mergeDeep({}, exerciseSpecificConfig, staticConfiguration)
+          );
         });
     },
   },
@@ -37,4 +57,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.container {
+  padding-top: 30px;
+}
+</style>

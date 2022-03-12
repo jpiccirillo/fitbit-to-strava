@@ -33,3 +33,11 @@ module.exports.nonRangeQueries = {
     return bb.size(parseInt(value));
   },
 };
+
+module.exports.exec = async (c, method, params, req, res, next) => {
+  try {
+    return c[method]({ ...params, type: "doc" });
+  } catch (e) {
+    return next(e);
+  }
+};

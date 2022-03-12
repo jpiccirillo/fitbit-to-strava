@@ -18,6 +18,14 @@ nonRangeQueries.backOfLine = function (value, urlQueryName, bb) {
   bb.filter("match", "backOfLine", value === "false" ? false : true);
   return bb;
 };
+nonRangeQueries.distance = function (value, urlQueryName, bb) {
+  bb.filter("match", "distance", value);
+  return bb;
+};
+nonRangeQueries.logType = function (value, urlQueryName, bb) {
+  bb.filter("match", "logType", value);
+  return bb;
+};
 
 C.getSupportedQueryParams = function ({ query: queries }, bodybuilder) {
   for (let key in queries) {

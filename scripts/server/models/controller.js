@@ -125,7 +125,7 @@ class Controller {
     const {
       body: {
         _source: {
-          originalStartTime,
+          startTime: _startTime,
           originalDuration,
           activeDuration,
           distance,
@@ -133,7 +133,7 @@ class Controller {
       },
     } = await exec("get", params, ...arguments);
     const duration = Math.max(originalDuration, activeDuration);
-    const startTime = shift(originalStartTime);
+    const startTime = shift(_startTime);
     const endTime = new Date(startTime).addMilliseconds(duration);
     const durationInMinutes = (duration / 1000 / 60).toFixed(1);
     const title = `Cycling (${durationInMinutes}min)`;

@@ -15,7 +15,7 @@
         </div>
       </h2>
       <h3 class="subtitle">
-        {{ data.originalStartTime | timezone }}
+        {{ data.startTime | timezone }}
       </h3>
     </div>
     <div>Duration: {{ data.originalDuration | minutes }}min</div>

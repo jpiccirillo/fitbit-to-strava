@@ -5,16 +5,30 @@
     <button
       class="styled-button neutral"
       @click="backOfLine"
-      :disabled="buttonDisabled"
+      :disabled="backofline__inflight"
     >
       Move to Back of Line
     </button>
     <button
       class="styled-button neutral"
       @click="getNewExercise"
-      :disabled="buttonDisabled"
+      :disabled="refetch__inflight"
     >
       Refetch
+    </button>
+    <button
+      class="styled-button neutral"
+      @click="viewInCalendar"
+      :disabled="viewCalendar__inflight"
+    >
+      View in Calendar
+    </button>
+    <button
+      class="styled-button neutral"
+      @click="addToCalendar"
+      :disabled="addCalendar__inflight"
+    >
+      Add to Calendar
     </button>
   </div>
 </template>
@@ -33,28 +47,42 @@ export default {
   data() {
     return {
       exercise: {},
-      buttonDisabled: false,
+      viewCalendar__inflight: false,
+      addCalendar__inflight: false,
+      refetch__inflight: false,
+      backofline__inflight: false,
       id: "",
     };
   },
   methods: {
     async backOfLine() {
-      this.buttonDisabled = true;
+      this.backofline__inflight = true;
       await fetch(`${base}/exercises/${this.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ backOfLine: true }),
       });
-      this.buttonDisabled = false;
+      this.backofline__inflight = false;
     },
     async getNewExercise() {
+      this.refetch__inflight = true;
       const url = `${base}/exercises?size=1&activityName=Bike&backOfLine=false`;
-      fetch(url)
-        .then((r) => r.json())
-        .then((r) => {
-          this.exercise = r.data[0]._source;
-          this.id = r.data[0]._id;
-        });
+      const r = await fetch(url).then((r) => r.json());
+      this.exercise = r.data[0]._source;
+      this.id = r.data[0]._id;
+      this.refetch__inflight = false;
+    },
+    async viewInCalendar() {
+      this.viewCalendar__inflight = true;
+      const url = `${base}/exercises/${this.id}/view`;
+      await fetch(url);
+      this.viewCalendar__inflight = false;
+    },
+    async addToCalendar() {
+      this.addCalendar__inflight = true;
+      const url = `${base}/exercises/${this.id}/add`;
+      await fetch(url, { method: "POST" });
+      this.addCalendar__inflight = false;
     },
   },
   created() {

@@ -3,7 +3,7 @@
   --red: #f14e4e;
   --orange: #f1bb4e;
   --green: #4ef18f;
-  --neutral: #CCCCCC;
+  --neutral: #cccccc;
 }
 
 .styled-button {
@@ -33,11 +33,15 @@
 }
 .neutral {
   background-color: var(--neutral);
-  color: grey;
+  color: rgb(75, 75, 75);
 }
 
-.styled-button:active {
+.styled-button:active:not(:disabled) {
   top: 0.1em;
+}
+
+.styled-button:disabled {
+  color: lightgrey;
 }
 
 @media all and (max-width: 30em) {

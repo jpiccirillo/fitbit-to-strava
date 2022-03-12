@@ -17,6 +17,14 @@ class Route {
     this.Router.post("/", ...b(controller._create));
     this.Router.post("/bulk", ...b(controller._bulkCreate));
     this.Router.patch("/:" + getIdName(this.index), ...b(controller._update));
+    this.Router.get(
+      "/:" + getIdName(this.index) + "/view",
+      ...b(controller._viewInCalendar)
+    );
+    this.Router.post(
+      "/:" + getIdName(this.index) + "/add",
+      ...b(controller._addToCalendar)
+    );
     return this;
   }
 }

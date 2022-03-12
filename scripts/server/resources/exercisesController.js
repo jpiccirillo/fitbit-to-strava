@@ -1,8 +1,15 @@
 const { Controller } = require("../models/controller");
-const { rangeQuery, nonRangeQueries, exec } = require("../helpers/index");
+const {
+  rangeQuery,
+  nonRangeQueries,
+  exec,
+  createGPXFile,
+} = require("../helpers/index");
 const C = new Controller("exercises");
 const { client } = require("../services/elasticsearch");
 const { run } = require("@jxa/run");
+const bodybuilder = require("bodybuilder");
+const heartratesController = require("./heartratesController");
 
 Date.prototype.addMilliseconds = function (count) {
   this.setMilliseconds(this.getMilliseconds() + count);
@@ -63,7 +70,7 @@ C.getSupportedQueryParams = function ({ query: queries }, bodybuilder) {
     );
   }
 
-  bodybuilder.sort("convertedStartTime", "asc");
+  bodybuilder.sort("convertedStartTime", "desc");
 
   return bodybuilder.build();
 };
@@ -106,6 +113,32 @@ C._addToCalendar = async function (req, res, next) {
     projectCalendar.events.push(event);
     Calendar.viewCalendar({ at: new Date(o.start) });
   }, config);
+  return next();
+};
+
+C._createHRGPXFile = async function (req, res, next) {
+  const exercise = await this.getExercise(req.params[this.idName]);
+  let { start, end } = this.getExerciseStartEnd(exercise);
+  const mockReq = {
+    query: {
+      size: "10000",
+      dateTimeBtwn: `${start.getTime()},${end.getTime()}`,
+    },
+  };
+  const params = {
+    index: "heartrates",
+    body: heartratesController.getSupportedQueryParams(mockReq, bodybuilder()),
+  };
+  const {
+    hits: { hits: hrArray },
+  } = (await exec(client, "search", params, ...arguments)).body;
+
+  await createGPXFile(hrArray);
+  return next();
+};
+
+C.getHeartRates = function (req, res, next) {
+  console.log(this);
   return next();
 };
 

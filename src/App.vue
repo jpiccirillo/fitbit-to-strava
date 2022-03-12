@@ -30,6 +30,13 @@
     >
       Add to Calendar
     </button>
+    <button
+      class="styled-button neutral"
+      @click="createGPXHRFile"
+      :disabled="addCalendar__inflight"
+    >
+      Create HR GPX File
+    </button>
   </div>
 </template>
 
@@ -66,7 +73,7 @@ export default {
     },
     async getNewExercise() {
       this.refetch__inflight = true;
-      const url = `${base}/exercises?size=1&activityName=Bike&backOfLine=false`;
+      const url = `${base}/exercises?size=1&activityName=Bike&backOfLine=false&distance=2.0`;
       const r = await fetch(url).then((r) => r.json());
       this.exercise = r.data[0]._source;
       this.id = r.data[0]._id;
@@ -81,6 +88,12 @@ export default {
     async addToCalendar() {
       this.addCalendar__inflight = true;
       const url = `${base}/exercises/${this.id}/add`;
+      await fetch(url, { method: "POST" });
+      this.addCalendar__inflight = false;
+    },
+    async createGPXHRFile() {
+      this.addCalendar__inflight = true;
+      const url = `${base}/exercises/${this.id}/combineGPX`;
       await fetch(url, { method: "POST" });
       this.addCalendar__inflight = false;
     },

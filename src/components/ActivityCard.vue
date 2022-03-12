@@ -21,6 +21,7 @@
     <div>Duration: {{ data.originalDuration | minutes }}min</div>
     <div>Active Duration: {{ data.activeDuration | minutes }}min</div>
     <div>Distance: {{ data.distance.toFixed(2) }}mi</div>
+    <div>Speed: {{ data.speed.toFixed(2) }}mph</div>
   </div>
 </template>
 

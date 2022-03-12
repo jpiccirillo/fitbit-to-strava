@@ -27,6 +27,10 @@ class Route {
         "/:" + getIdName(this.index) + "/add",
         ...b(controller._addToCalendar)
       );
+      this.Router.post(
+        "/:" + getIdName(this.index) + "/combineGPX",
+        ...b(controller._createHRGPXFile)
+      );
     }
     return this;
   }

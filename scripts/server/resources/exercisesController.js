@@ -4,6 +4,7 @@ const {
   nonRangeQueries,
   exec,
   createGPXFile,
+  shift,
 } = require("../helpers/index");
 const C = new Controller("exercises");
 const { client } = require("../services/elasticsearch");
@@ -118,11 +119,12 @@ C._addToCalendar = async function (req, res, next) {
 
 C._createHRGPXFile = async function (req, res, next) {
   const exercise = await this.getExercise(req.params[this.idName]);
-  let { start, end } = this.getExerciseStartEnd(exercise);
+  let { convertedStartTime: beginning, duration } = exercise;
+  const end = beginning + duration;
   const mockReq = {
     query: {
       size: "10000",
-      dateTimeBtwn: `${start.getTime()},${end.getTime()}`,
+      dateTimeBtwn: `${beginning},${end}`,
     },
   };
   const params = {
@@ -149,10 +151,4 @@ function f(date) {
     hour: "2-digit",
     minute: "2-digit",
   })}`;
-}
-
-function shift(d) {
-  let _d = new Date(d);
-  _d.setHours(_d.getHours() - 5);
-  return _d;
 }

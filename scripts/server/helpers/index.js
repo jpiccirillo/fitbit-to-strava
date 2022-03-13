@@ -36,6 +36,12 @@ module.exports.nonRangeQueries = {
   },
 };
 
+module.exports.shift = (d) => {
+  let _d = new Date(d);
+  _d.setHours(_d.getHours() - 5);
+  return _d;
+};
+
 module.exports.exec = async (c, method, params, req, res, next) => {
   try {
     return c[method]({ ...params, type: "doc" });
@@ -48,12 +54,12 @@ module.exports.createGPXFile = async (hrArray) => {
   let file = `<?xml version="1.0" encoding="UTF-8"?>`;
   file += `<gpx creator="--No GPS SELECTED--" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">`;
   file += `<trk>`;
-  file += `<name>Created By Script</name>`;
+  file += `<name>Created By Script on ${new Date().toLocaleString()}</name>`;
   file += `<type>Biking</type>`;
   file += `<trkseg>`;
   for (let { _source: hr } of hrArray) {
     file += `<trkpt>
-    <time>${new Date(hr.dateTime).toISOString()}</time>
+    <time>${module.exports.shift(hr.dateTime).toISOString()}</time>
       <extensions>
         <gpxtpx:TrackPointExtension>
           <gpxtpx:hr>${hr.bpm}</gpxtpx:hr>
